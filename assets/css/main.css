@@ -1,0 +1,107 @@
+* {
+  box-sizing: border-box;
+}
+html{
+      margin: 0px;
+      padding: 0px;
+}
+html,
+body {
+  height: 100%;
+  font-family: "Open Sans";
+  margin: 0px;
+  padding: 0px;
+    font-variant: normal;
+    font-style: normal;
+    font-weight: 700;
+}
+body{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+section{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-width: 1280px;
+    width: 100%;
+    position: relative;
+    align-items: flex-start;
+}
+#cards{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  position: relative;
+  margin-top: 60px;
+}
+.card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 2px solid #555;
+  border-radius: 2px;
+  background: #fff;
+  color: #444;
+  width: 150px;
+  height: 270px;
+  margin: 10px;
+  display: inline-block;
+  transition: 0.5s;
+  transform: rotate(70deg);
+}
+.card.diams,
+.card.hearts {
+  color: #ff0000;
+}
+.card:hover{
+  box-shadow: 0px 0px 27px #333;
+  cursor: pointer;
+}
+.top,
+.bottom {
+  font-size: 24px;
+  padding: 10px;
+}
+
+.bottom {
+  float: right;
+}
+
+.number,
+.icon {
+  display: block;
+}
+
+.rotate {
+  transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  /* IE 9 */
+  -webkit-transform: rotate(180deg);
+  /* Chrome, Safari, Opera */
+}
+
+.lg_icon {
+  font-size: 70px;
+  text-align: center;
+  display: block;
+}
+
+.fade-in {
+  opacity: 0;
+  /* make things invisible upon start */
+  -webkit-animation: fadeIn ease-in 1;
+  /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+  -moz-animation: fadeIn ease-in 1;
+  animation: fadeIn ease-in 1;
+
+  -webkit-animation-fill-mode: forwards;
+  /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+  -moz-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+
+  -webkit-animation-duration: 1s;
+  -moz-animation-duration: 1s;
+  animation-duration: 1s;
+}
