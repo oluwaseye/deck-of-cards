@@ -39,14 +39,63 @@ $(document).ready(function () {
         )
       ));
   }
-
-  $(".card").each(function(){
+function picknspread(){
+  $("#cards .card").each(function(){
     var prevIndex = $(this).index() - 1;
     //$(this).prev(".card").a;
     var c =  110 + $(this).index() * 2 ;
     console.log(c );
     $(this).css({ "transform": "rotate(" + c + "deg)", "left": $(this).index() * 5});
     $(this).attr("data-rotate", c);
-
   });
+}
+  function lineupV(){
+    $("#cards .card").each(function(){
+      $(this).addClass("lineup").css("top", 0 + 60 *  $(this).index());
+
+      $("section").addClass("section-half");
+      $("#cards").addClass("half");
+      $("#selected_cards").addClass("half");
+
+      $(this).on('mouseenter', function(){
+        $(this).addClass("pop-right");
+      });
+      $(this).on('mouseleave', function(){
+        $(this).removeClass("pop-right");
+      });
+  });
+  }
+
+  lineupV();
+
+  function lineupH(){
+    $("#cards .card").each(function(){
+      $(this).addClass("lineup").css("left", 0 + 30 *  $(this).index());
+      $(this).on('mouseenter', function(){
+        $(this).addClass("pop-up");
+      });
+      $(this).on('mouseleave', function(){
+        $(this).removeClass("pop-up");
+      });
+  });
+  }
+
+  //lineupH();
+
+   function resetLineUpCards () {
+    $("#cards .card").each(function () {
+        $(this).removeClass("lineup").addClass("lineup");
+    });
+  };
+
+  function chooseRandomCards(){
+    randomCards = jQuery("#cards .card").get().sort(function(){ 
+      return Math.round(Math.random())-0.5
+    }).slice(0,5).clone();
+
+    $('#selected_cards').html(randomCards);
+  }
+
+
+
 });
