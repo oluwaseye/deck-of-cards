@@ -4,6 +4,54 @@ $(document).ready(function () {
     this.rank = rank;
     this.suit = suit;
   };
+
+  function picknspread() {
+    $("#cards .card").each(function () {
+      var prevIndex = $(this).index() - 1;
+      //$(this).prev(".card").a;
+      var c = 110 + $(this).index() * 2;
+      console.log(c);
+      $(this).css({ "transform": "rotate(" + c + "deg)", "position": "absolute", "left": $(this).index() * 5 });
+      $(this).attr("data-rotate", c);
+    });
+  }
+  
+  function resetStackCards() {
+    $("#cards .card").each(function () {
+      $(this).removeClass("lineup").css("style", "");
+    });
+  };
+  function stackVertical() {
+    resetStackCards();
+    $("#cards .card").each(function () {
+      $(this).addClass("lineup").css({ "top" : 0 + 60 * $(this).index(), "left": "0"});
+      $(this).parent("#cards").attr("data-active", "stack-vertical");
+      $(this).on('mouseenter', function () {
+        $(this).addClass("pop-right");
+      });
+      $(this).on('mouseleave', function () {
+        $(this).removeClass("pop-right");
+      });
+    });
+  }
+
+  // lineupV();
+
+  function stackHorizontal() {
+    resetStackCards();
+    $("#cards .card").each(function () {
+      $(this).addClass("lineup").css({ "left" : 0 + 30 * $(this).index(), "top": "0"});
+      $(this).parent("#cards").attr("data-active", "stack-horizontal");
+      $(this).on('mouseenter', function () {
+        $(this).addClass("pop-up");
+      });
+      $(this).on('mouseleave', function () {
+        $(this).removeClass("pop-up");
+      });
+    });
+  }
+  
+
   function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -39,58 +87,32 @@ $(document).ready(function () {
     this.each(function (i) {
       $(this).replaceWith($(shuffled[i]));
     });
+    var activeEff = $(document).find("#cards").attr("data-active");
+   
 
-    return $(shuffled);
+    switch (activeEff) {
+      case "stack-horizontal":
+        stackHorizontal();
+        return $(shuffled);
+        break;
+      case "stack-vertical":
+        stackVertical();
+        return $(shuffled);
+        break;
+      default:
+        return $(shuffled);
+    }
+    
 
   };
-  function picknspread() {
-    $("#cards .card").each(function () {
-      var prevIndex = $(this).index() - 1;
-      //$(this).prev(".card").a;
-      var c = 110 + $(this).index() * 2;
-      console.log(c);
-      $(this).css({ "transform": "rotate(" + c + "deg)", "position": "absolute", "left": $(this).index() * 5 });
-      $(this).attr("data-rotate", c);
-    });
-  }
 
-  function lineupV() {
-    $("#cards .card").each(function () {
-      $(this).addClass("lineup").css("top", 0 + 60 * $(this).index());
-
-        $(this).on('mouseenter', function () {
-        $(this).addClass("pop-right");
-      });
-      $(this).on('mouseleave', function () {
-        $(this).removeClass("pop-right");
-      });
-    });
-  }
-
-  // lineupV();
-
-  function lineupH() {
-    $("#cards .card").each(function () {
-      $(this).addClass("lineup").css("left", 0 + 30 * $(this).index());
-      $(this).on('mouseenter', function () {
-        $(this).addClass("pop-up");
-      });
-      $(this).on('mouseleave', function () {
-        $(this).removeClass("pop-up");
-      });
-    });
-  }
 
   //lineupH();
 
-  function resetLineUpCards() {
-    $("#cards .card").each(function () {
-      $(this).removeClass("lineup").addClass("lineup");
-    });
-  };
+
 
   function displayCards(obj) {
-    $("#cards").empty();
+   // $("#cards").empty();
     var rank, types;
 
     if (obj.shuffle === true) {
@@ -118,13 +140,13 @@ $(document).ready(function () {
       for (j = 0; j < rank.length; j++) {
         this.deck[i * rank.length + j] = new Card(rank[j], types[i]);
 
-        buildCards(types[i], types[i].substring(1, types[i].length - 1), rank[j], obj);
+        buildCards(types[i], types[i].substring(1, types[i].length - 1), rank[j]);
       }
     }
   }
   //This function helps to display the card. 
   //The function accepts card type and number to display each card dynamically.
-  function buildCards(card, name, number, obj) {
+  function buildCards(card, name, number) {
 
     $('#cards').append(
       $('<div/>', { 'class': 'card ' + name, 'data-card-name': name, 'data-card-num': number }).append(
@@ -139,25 +161,16 @@ $(document).ready(function () {
         )
       ));
 
-    if(obj.shuffle == true){
-      $('#cards .card').shuffleElements();
-    }
-
-    if (obj.stack == "v") {
-      lineupV();
-    }
-    if (obj.stack == "h") {
-      lineupH();
-    }
+   
   }
 
 
 
   displayCards({ shuffle: false });
 
-  $("#shuffle").on("click", function (){ displayCards({ shuffle: true }); });
-  $("#stack-h").on("click", function () { displayCards({ stack: "h" }); });
-  $("#stack-v").on("click", function () { displayCards({ stack: "v" });  });
-  $("#reset").on("click", function () {    displayCards({ shuffle: false });  });
+  $("#shuffle").on("click", function () { $('#cards .card').shuffleElements(); });
+  $("#stack-h").on("click", function () { stackHorizontal(); });
+  $("#stack-v").on("click", function () { stackVertical();  });
+  $("#reset").on("click", function () { $('#cards').empty(); displayCards({ shuffle: false });  });
 
 });
