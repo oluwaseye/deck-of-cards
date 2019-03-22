@@ -8,7 +8,6 @@ $(document).ready(function () {
   function picknspread() {
     $("#cards .card").each(function () {
       var prevIndex = $(this).index() - 1;
-      //$(this).prev(".card").a;
       var c = 110 + $(this).index() * 2;
       console.log(c);
       $(this).css({ "transform": "rotate(" + c + "deg)", "position": "absolute", "left": $(this).index() * 5 });
@@ -18,37 +17,38 @@ $(document).ready(function () {
   
   function resetStackCards() {
     $("#cards .card").each(function () {
-      $(this).removeClass("lineup").css("style", "");
+      $(this).removeClass("lineup pop-right pop-up").css("style", "");
     });
   };
   function stackVertical() {
     resetStackCards();
     $("#cards .card").each(function () {
-      $(this).addClass("lineup").css({ "top" : 0 + 60 * $(this).index(), "left": "0"});
+      $(this).addClass("lineup pop-right").css({ "top" : 0 + 60 * $(this).index(), "left": "0"});
       $(this).parent("#cards").attr("data-active", "stack-vertical");
-      $(this).on('mouseenter', function () {
-        $(this).addClass("pop-right");
-      });
-      $(this).on('mouseleave', function () {
-        $(this).removeClass("pop-right");
-      });
     });
   }
 
-  // lineupV();
 
   function stackHorizontal() {
     resetStackCards();
     $("#cards .card").each(function () {
-      $(this).addClass("lineup").css({ "left" : 0 + 30 * $(this).index(), "top": "0"});
+      $(this).addClass("lineup pop-up").css({ "left" : 0 + 30 * $(this).index(), "top": "0"});
       $(this).parent("#cards").attr("data-active", "stack-horizontal");
-      $(this).on('mouseenter', function () {
-        $(this).addClass("pop-up");
-      });
-      $(this).on('mouseleave', function () {
-        $(this).removeClass("pop-up");
-      });
     });
+  }
+
+  function pickNine() {
+    //return cards 
+    $("#selected_cards .card:lt(9)").each(function () {
+      $(this).clone(true).appendTo('#cards');
+      $(this).remove();
+    });
+  //pull 9
+    $("#cards .card:lt(9)").each(function () {
+      $(this).clone(true).appendTo('#selected_cards');
+      $(this).remove();
+    });
+
   }
   
 
@@ -105,11 +105,6 @@ $(document).ready(function () {
     
 
   };
-
-
-  //lineupH();
-
-
 
   function displayCards(obj) {
    // $("#cards").empty();
@@ -171,6 +166,10 @@ $(document).ready(function () {
   $("#shuffle").on("click", function () { $('#cards .card').shuffleElements(); });
   $("#stack-h").on("click", function () { stackHorizontal(); });
   $("#stack-v").on("click", function () { stackVertical();  });
-  $("#reset").on("click", function () { $('#cards').empty(); displayCards({ shuffle: false });  });
+  $("#pick-9").on("click", function () { pickNine(); });
+  $("#reset").on("click", function () { $('#selected_cards').empty(); $('#cards').empty(); displayCards({ shuffle: false });  });
+
+
+  
 
 });
