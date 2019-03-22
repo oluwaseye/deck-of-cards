@@ -21,13 +21,13 @@ body{
   align-items: center;
 }
 section{
-    display: flex;
-    flex-direction: column;
+    display: grid;
     height: 100%;
     padding: 20px 30px;
     width: 100%;
     position: relative;
-    align-items: flex-start;
+    grid-template-rows: 10% auto;
+    grid-auto-rows: auto;
 }
 
 section .ctas {
@@ -36,10 +36,9 @@ section .ctas {
 section .ctas ul{
   list-style: none;
   padding: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 20% 20% 20% 20% 20%;
+  justify-items: center;
 }
 section .ctas ul li a{
   background: #000;
@@ -54,20 +53,18 @@ section .ctas ul li a:hover {
 }
 
 section .main{
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-auto-rows: auto;
   height: 100%;
   padding: 20px 30px;
   width: 100%;
   position: relative;
-  align-items: flex-start;
 }
 #cards{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   position: relative;
-  margin-top: 90px;
 }
 .card {
   border: 2px solid #555;
@@ -95,11 +92,11 @@ section .main{
   top:0;
 }
 
-.pop-up{
-  top: -90px;
+.card.pop-up:hover {
+  top: -90px !important;
 }
-.pop-right{
-  left: 90px;
+.card.pop-right:hover {
+  left: 90px !important;
 }
 .top,
 .bottom {
