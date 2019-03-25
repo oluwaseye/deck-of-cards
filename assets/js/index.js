@@ -6,22 +6,21 @@ $(document).ready(function () {
   };
 
   function picknspread() {
-    $("#cards .card").each(function () {
+    $("#selected_cards .card").each(function () {
       var prevIndex = $(this).index() - 1;
       var c = 110 + $(this).index() * 2;
-      console.log(c);
       $(this).css({ "transform": "rotate(" + c + "deg)", "position": "absolute", "left": $(this).index() * 5 });
       $(this).attr("data-rotate", c);
     });
   }
   
-  function resetStackCards() {
-    $("#cards .card").each(function () {
-      $(this).removeClass("lineup pop-right pop-up").css("style", "");
+  function resetStackCards(ele) {
+    $(ele).each(function () {
+      $(this).removeClass("lineup pop-right pop-up").removeAttr("style");
     });
   };
   function stackVertical() {
-    resetStackCards();
+    resetStackCards("#cards .card");
     $("#cards .card").each(function () {
       $(this).addClass("lineup pop-right").css({ "top" : 0 + 60 * $(this).index(), "left": "0"});
       $(this).parent("#cards").attr("data-active", "stack-vertical");
@@ -30,31 +29,47 @@ $(document).ready(function () {
 
 
   function stackHorizontal() {
-    resetStackCards();
+    resetStackCards("#cards .card");
     $("#cards .card").each(function () {
       $(this).addClass("lineup pop-up").css({ "left" : 0 + 30 * $(this).index(), "top": "0"});
       $(this).parent("#cards").attr("data-active", "stack-horizontal");
     });
   }
 
+  function maintainActiveStack(fn) {
+    var activeEff = $(document).find("#cards").attr("data-active");
+    switch (activeEff) {
+      case "stack-horizontal":
+        stackHorizontal();
+        return fn;
+        break;
+      case "stack-vertical":
+        stackVertical();
+        return fn;
+        break;
+      default:
+        return fn;
+    }
+
+  }
   function pickNine() {
     //return cards 
     $("#selected_cards .card:lt(9)").each(function () {
       $(this).clone(true).appendTo('#cards');
       $(this).remove();
     });
+   
   //pull 9
     $("#cards .card:lt(9)").each(function () {
       $(this).clone(true).appendTo('#selected_cards');
       $(this).remove();
     });
-
+    maintainActiveStack('');
   }
-  
+
 
   function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
-
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
 
@@ -67,7 +82,6 @@ $(document).ready(function () {
       array[currentIndex] = array[randomIndex];
       array[randomIndex] = temporaryValue;
     }
-
     return array;
   }
 
@@ -87,24 +101,10 @@ $(document).ready(function () {
     this.each(function (i) {
       $(this).replaceWith($(shuffled[i]));
     });
-    var activeEff = $(document).find("#cards").attr("data-active");
-   
-
-    switch (activeEff) {
-      case "stack-horizontal":
-        stackHorizontal();
-        return $(shuffled);
-        break;
-      case "stack-vertical":
-        stackVertical();
-        return $(shuffled);
-        break;
-      default:
-        return $(shuffled);
-    }
-    
-
+    maintainActiveStack('');
   };
+
+
 
   function displayCards(obj) {
    // $("#cards").empty();
@@ -116,14 +116,12 @@ $(document).ready(function () {
         "J", "Q", "K"]);
       //Array with the card types using the unicode representations.
       types = shuffle(["&clubs;", "&diams;", "&hearts;", "&spades;"]);
-
     } else {
       //Array containing all the ranks
       rank = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10",
         "J", "Q", "K"];
       //Array with the card types using the unicode representations.
       types = ["&clubs;", "&diams;", "&hearts;", "&spades;"];
-
     }
 
     //Array with the expected total number of cards 
@@ -155,21 +153,13 @@ $(document).ready(function () {
           $('<span/>', { 'class': 'number rotate', html: number })
         )
       ));
-
-   
   }
-
-
-
   displayCards({ shuffle: false });
-
   $("#shuffle").on("click", function () { $('#cards .card').shuffleElements(); });
   $("#stack-h").on("click", function () { stackHorizontal(); });
   $("#stack-v").on("click", function () { stackVertical();  });
-  $("#pick-9").on("click", function () { pickNine(); });
+  $("#pick-9").on("click", function () { pickNine(); resetStackCards("#selected_cards .card");  });
   $("#reset").on("click", function () { $('#selected_cards').empty(); $('#cards').empty(); displayCards({ shuffle: false });  });
 
-
   
-
 });
